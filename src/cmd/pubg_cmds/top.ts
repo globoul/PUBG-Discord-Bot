@@ -27,9 +27,10 @@ export class Top extends Command {
 
     help: CommandHelp = {
         name: 'top',
-        description: 'Tableau des  "x" joueurs enregister les mieux classés sur le serveur',
+        description: 'Gets the top "x" players registered in the server',
+        usage: '<prefix>top [Number-Of-Users] [season=(2018-01 | 2018-02 | 2018-03)] [region=(na | as | kr/jp | kakao | sa | eu | oc | sea)] [squadSize=(1 | 2 | 4)] [mode=(fpp | tpp)]',
         examples: [
-            '!-top 5',
+            '!pubg-top',
             '!pubg-top season=2018-03',
             '!pubg-top season=2018-03 region=na',
             '!pubg-top season=2018-03 region=na squadSize=4',
