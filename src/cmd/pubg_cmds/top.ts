@@ -103,10 +103,10 @@ export class Top extends Command {
                 playersInfo.sort(function (a: Player, b: Player) { return (+b.rating) - (+a.rating); });
                 let topPlayers: Player[] = playersInfo.slice(0, amount);
                 let embed: Discord.RichEmbed = new Discord.RichEmbed()
-                    .setTitle('Top ' + amount + ' local players')
-                    .setDescription('Season:\t' + SeasonEnum[season] + '\nRegion:\t' + region.toUpperCase() + '\nMode: \t' + mode.toUpperCase() + '\nSquad Size: \t' + SquadSizeEnum[squadSize])
+                    .setTitle('Top ' + amount + ' des meilleurs jouers du serveur ')
+                    .setDescription('Saison:\t' + SeasonEnum[season] + '\nRégion:\t' + region.toUpperCase() + '\nMode de vue: \t' + mode.toUpperCase() + '\nTaille équipe: \t' + SquadSizeEnum[squadSize])
                     .setColor(0x00AE86)
-                    .setFooter('Data retrieved from https://pubg.op.gg/')
+                    .setFooter('Data 📥 de: `https://pubg.op.gg/')
                     .setTimestamp();
                 let names: string = '';
                 let ratings: string = '';
@@ -120,8 +120,8 @@ export class Top extends Command {
                     ratings += ratingStr + '\n';
                     kds += kdsStr + '\n';
                 }
-                embed.addField('Name', names, true)
-                    .addField('Rank / Rating', ratings, true)
+                embed.addField('Pseudo Joeur', names, true)
+                    .addField('#Place / Point de Rating', ratings, true)
                     .addField('KD / KDA / Avg Dmg', kds, true);
                 await msg.edit({ embed });
             });
@@ -144,7 +144,7 @@ export class Top extends Command {
                     availableSeasons += seasons[i].season;
                 }
             }
-            errMessage += `Error:: Invalid season parameter\n${availableSeasons}\n`;
+            errMessage += `Erreur:: Paramètre de la saison invalide\n${availableSeasons}\n`;
         }
         if (!validRegion) {
             let regions: any = await sqlRegionsService.getAllRegions();
@@ -157,7 +157,7 @@ export class Top extends Command {
                     availableRegions += regions[i].shortname;
                 }
             }
-            errMessage += `\nError:: Invalid region parameter\n${availableRegions}\n`;
+            errMessage += `\nErreur:: Paramètre de la region invalide\n${availableRegions}\n`;
         }
         if (!validMode) {
             let modes: any = await sqlModesService.getAllModes();
@@ -170,7 +170,7 @@ export class Top extends Command {
                     availableModes += modes[i].shortname;
                 }
             }
-            errMessage += `\nError:: Invalid mode parameter\n${availableModes}\n`;
+            errMessage += `\nErreur:: Paramètre du mode de jeu invalide\n${availableModes}\n`;
         }
         if (!validSquadSize) {
             let squadSizes: any = await sqlSqaudSizeService.getAllSquadSizes();
@@ -183,7 +183,7 @@ export class Top extends Command {
                     availableSizes += squadSizes[i].size;
                 }
             }
-            errMessage += `\nError:: Invalid squad size parameter\n${availableSizes}\n`;
+            errMessage += `\nErreur:: Paramètre de la taille des équipes invalide\n${availableSizes}\n`;
         }
         if (!validSeason || !validRegion || !validMode || !validSquadSize) {
             cs.handleError(msg, errMessage, this.help);
