@@ -27,10 +27,9 @@ export class Top extends Command {
 
     help: CommandHelp = {
         name: 'top',
-        description: 'Gets the top "x" players registered in the server',
-        usage: '<prefix>top [Number-Of-Users] [season=(2018-01 | 2018-02 | 2018-03)] [region=(na | as | kr/jp | kakao | sa | eu | oc | sea)] [squadSize=(1 | 2 | 4)] [mode=(fpp | tpp)]',
+        description: 'Tableau des  "x" joueurs enregister les mieux classés sur le serveur',
         examples: [
-            '!pubg-top',
+            '!-top 5',
             '!pubg-top season=2018-03',
             '!pubg-top season=2018-03 region=na',
             '!pubg-top season=2018-03 region=na squadSize=4',
@@ -66,8 +65,8 @@ export class Top extends Command {
         }
 
         const batchEditAmount: number = 5;
-        checkingParametersMsg.edit(`Aggregating \`top ${amount}\` on \`${registeredPlayers.length} registered users\` ... give me a second`);
-        msg.channel.send('Grabbing player data')
+        checkingParametersMsg.edit(`Agrégation du \`top ${amount}\` sur les \`${registeredPlayers.length} jouers enregistrés\` ... une seconde ...`);
+        msg.channel.send('Extraction des informations sur le joueur')
             .then(async (msg: Discord.Message) => {
                 let playersInfo: Player[] = new Array();
                 for (let i = 0; i < registeredPlayers.length; i++) {
@@ -106,7 +105,7 @@ export class Top extends Command {
                     .setTitle('Top ' + amount + ' des meilleurs jouers du serveur ')
                     .setDescription('Saison:\t' + SeasonEnum[season] + '\nRégion:\t' + region.toUpperCase() + '\nMode de vue: \t' + mode.toUpperCase() + '\nTaille équipe: \t' + SquadSizeEnum[squadSize])
                     .setColor(0x00AE86)
-                    .setFooter('Data 📥 de: `https://pubg.op.gg/')
+                    .setFooter('Data 📥 de: `https://pubg.op.gg`')
                     .setTimestamp();
                 let names: string = '';
                 let ratings: string = '';
@@ -114,13 +113,13 @@ export class Top extends Command {
                 // Construct top strings
                 for (var i = 0; i < topPlayers.length; i++) {
                     let character: Player = topPlayers[i];
-                    let ratingStr: string = character.rating ? `${character.rank} / ${character.rating}` : 'Not available';
+                    let ratingStr: string = character.rating ? `${character.rank} / ${character.rating}` : 'Non disponible';
                     let kdsStr: string = `${character.kd} / ${character.kda} / ${character.average_damage_dealt}`;
                     names += character.username + '\n';
                     ratings += ratingStr + '\n';
                     kds += kdsStr + '\n';
                 }
-                embed.addField('Pseudo Joeur', names, true)
+                embed.addField('```Pseudo Joeur```',names, true)
                     .addField('#Place / Point de Rating', ratings, true)
                     .addField('KD / KDA / Avg Dmg', kds, true);
                 await msg.edit({ embed });
