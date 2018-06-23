@@ -120,8 +120,8 @@ export class Top extends Command {
                     ratings += ratingStr + '\n';
                     kds += kdsStr + '\n';
                 }
-                embed.addField('```Pseudo Joeur```',names, true)
-                    .addField('#Place / Point de Rating', ratings, true)
+                embed.addField('Pseudo \n Joeur','sqdfqsdfqsdf'names, true)
+                    .addField('#Place / Point de Rating','\n''+' ratings, true)
                     .addField('KD / KDA / Avg Dmg', kds, true);
                 await msg.edit({ embed });
             });
