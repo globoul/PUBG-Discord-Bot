@@ -28,13 +28,14 @@ export class Rank extends Command {
         description: 'Returns a players solo, duo, and squad ranking details.',
         usage: '<prefix>rank <pubg username> [season=(2018-01 | 2018-02 | 2018-03)] [region=(na | as | kr/jp | kakao | sa | eu | oc | sea)] [mode=(fpp | tpp)]',
         examples: [
-            '!pubg-rank john',
-            '!pubg-rank john season=2018-03',
-            '!pubg-rank john season=2018-03 region=eu',
-            '!pubg-rank john season=2018-03 region=na mode=tpp',
-            '!pubg-rank john region=as mode=tpp season=2018-03',
+            '//rank john',
+            '//rank john season=2018-03',
+            '//rank john season=2018-03 region=eu',
+            '//rank john season=2018-03 region=na mode=tpp',
+            '//rank john region=as mode=tpp season=2018-03',
         ]
     };
+   
 
 
     async run(bot: DiscordClientWrapper, msg: Discord.Message, params: string[], perms: number) {
@@ -57,7 +58,7 @@ export class Rank extends Command {
         }
         let checkingParametersMsg: Discord.Message = (await msg.channel.send('Checking for valid parameters ...')) as Discord.Message;
         if (!(await this.checkParameters(msg, season, region, mode))) {
-            checkingParametersMsg.delete();
+            //checkingParametersMsg.delete();
             return;
         }
         checkingParametersMsg.edit(`Getting data for ${username}`)
@@ -67,51 +68,56 @@ export class Rank extends Command {
                     message.edit(`Could not find ${username} on the ${region} region. Double check the username and region.`);
                     return;
                 }
-                const soloData: Player = await pubgService.getPUBGCharacterData(id, username, season, region, 1, mode);
-                const duoData: Player = await pubgService.getPUBGCharacterData(id, username, season, region, 2, mode);
+                //const soloData: Player = await pubgService.getPUBGCharacterData(id, username, season, region, 1, mode);
+                //const duoData: Player = await pubgService.getPUBGCharacterData(id, username, season, region, 2, mode);
                 const squadData: Player = await pubgService.getPUBGCharacterData(id, username, season, region, 4, mode);
                 let embed: Discord.RichEmbed = new Discord.RichEmbed()
-                    .setTitle('Ranking: ' + username)
+                    .setTitle(`${username}`)
                     .setDescription('Season:\t' + SeasonEnum[season] + '\nRegion:\t' + region.toUpperCase() + '\nMode: \t' + mode.toUpperCase())
-                    .setColor(0x00AE86)
+                    .setColor(0x00f6ff)
                     .setFooter(`https://pubg.op.gg/user/${username}?server=${region}`)
                     .setTimestamp();
-                if (soloData) {
-                    this.addEmbedFields(embed, 'Solo', soloData);
-                }
-                else {
-                    embed.addBlankField(false);
-                    embed.addField('Solo Status', 'Player hasn\'t played solo games this season', false);
-                }
-                if (duoData) {
-                    this.addEmbedFields(embed, 'Duo', duoData);
-                }
-                else {
-                    embed.addBlankField(false);
-                    embed.addField('Duo Status', 'Player hasn\'t played duo games this season', false);
-                }
+                //if (soloData) {
+                //    this.addEmbedFields(embed, 'Solo', soloData);
+                //}
+                //else {
+                //   embed.addBlankField(false);
+                //    embed.addField('Solo Status', 'Player hasn\'t played solo games this season', false);
+                //}
+                //if (duoData) {
+                //    this.addEmbedFields(embed, 'Duo', duoData);
+                //}
+                //else {
+                //    embed.addBlankField(false);
+                //    embed.addField('Duo Status', 'Player hasn\'t played duo games this season', false);
+                //}
                 if (squadData) {
                     this.addEmbedFields(embed, 'Squad', squadData);
-                }
+                    console.log(message.embeds);
+               }
                 else {
                     embed.addBlankField(false);
                     embed.addField('Squad Stats', 'Player hasn\'t played squad games this season', false);
                 }
-                message.edit({ embed });
+                message.channel.send({ embed });
+            console.log(message.embeds);
             });
     };
 
 
     addEmbedFields(embed: Discord.RichEmbed, squadType, playerData): void {
         embed.addBlankField(false)
-            .addField(squadType + ' Rank / Rating / Top % / Grade', playerData.rank + ' / ' + playerData.rating + ' / ' + playerData.topPercent + ' / ' + playerData.grade, false)
-            .addField('KD / KDA', playerData.kd + ' / ' + playerData.kda, true)
+            //.addField(squadType + ' Rank / Rating / Top % / Grade', playerData.rank + ' / ' + playerData.rating + ' / ' + playerData.topPercent + ' / ' + playerData.grade, false)
+            .addField(squadType + ' Rank: ' + playerData.rank, `${playerData.rating}`, false)
+            //.addField('Top %', playerData.topPercent, true)            
+            .addField('KD', playerData.kd, true)
+            .addField('Average Damage', playerData.average_damage_dealt, true)
             .addField('Win %', playerData.winPercent, true)
-            .addField('Top 10%', playerData.topTenPercent, true)
             .addField('Headshot Kill %', playerData.headshot_kills, true)
+            .addField('Top 10%', playerData.topTenPercent, true)
             .addField('Longest Kill', playerData.longest_kill, true)
-            .addField('Average Damage', playerData.average_damage_dealt, true);
-    }
+       //.addField('KD / KDA', playerData.kd + ' / ' + playerData.kda, true)
+   }
 
     async checkParameters(msg: Discord.Message, checkSeason: string, checkRegion: string, checkMode: string): Promise<boolean> {
         let errMessage: string = '';
