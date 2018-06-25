@@ -105,17 +105,8 @@ export class Rank extends Command {
             .addField('Top 10%', playerData.topTenPercent, true)
             .addField('Longest Kill', playerData.longest_kill, true)
        //.addField('KD / KDA', playerData.kd + ' / ' + playerData.kda, true)
-   
-   if (playerData.ranking>=2000 && msg.guild) {
-       let roledata: Discord.RoleData;
-       roledata.name='Master'
-       roledata.color='DARK_PURPLE'
-       roledata.mentionable=true
-       roledata.hoist=true
-       msg.guild.createRole(roledata).then(role => 
-        msg.member.addRole(role.id));
     }
-}
+   
 
 
 
