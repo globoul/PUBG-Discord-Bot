@@ -53,7 +53,7 @@ export class Rank extends Command {
         }
         else {
             season = cs.getParamValue('season=', params, await sqlSeasonsService.getLatestSeason());
-            region = cs.getParamValue('region=', params, 'na');
+            region = cs.getParamValue('region=', params, 'eu');
             mode = cs.getParamValue('mode=', params, 'fpp');
         }
         let checkingParametersMsg: Discord.Message = (await msg.channel.send('Checking for valid parameters ...')) as Discord.Message;
@@ -77,35 +77,23 @@ export class Rank extends Command {
                     .setColor(0x00f6ff)
                     .setFooter(`https://pubg.op.gg/user/${username}?server=${region}`)
                     .setTimestamp();
-                //if (soloData) {
-                //    this.addEmbedFields(embed, 'Solo', soloData);
-                //}
-                //else {
-                //   embed.addBlankField(false);
-                //    embed.addField('Solo Status', 'Player hasn\'t played solo games this season', false);
-                //}
-                //if (duoData) {
-                //    this.addEmbedFields(embed, 'Duo', duoData);
-                //}
-                //else {
-                //    embed.addBlankField(false);
-                //    embed.addField('Duo Status', 'Player hasn\'t played duo games this season', false);
-                //}
+
                 if (squadData) {
-                    this.addEmbedFields(embed, 'Squad', squadData);
+                    this.addEmbedFields(embed, 'Squad', squadData, msg);
                     console.log(message.embeds);
                }
                 else {
                     embed.addBlankField(false);
                     embed.addField('Squad Stats', 'Player hasn\'t played squad games this season', false);
                 }
+                
                 message.channel.send({ embed });
             console.log(message.embeds);
             });
     };
 
 
-    addEmbedFields(embed: Discord.RichEmbed, squadType, playerData): void {
+    addEmbedFields(embed: Discord.RichEmbed, squadType, playerData, msg): void {
         embed.addBlankField(false)
             //.addField(squadType + ' Rank / Rating / Top % / Grade', playerData.rank + ' / ' + playerData.rating + ' / ' + playerData.topPercent + ' / ' + playerData.grade, false)
             .addField(squadType + ' Rank: ' + playerData.rank, `${playerData.rating}`, false)
@@ -117,7 +105,20 @@ export class Rank extends Command {
             .addField('Top 10%', playerData.topTenPercent, true)
             .addField('Longest Kill', playerData.longest_kill, true)
        //.addField('KD / KDA', playerData.kd + ' / ' + playerData.kda, true)
-   }
+   
+   if (playerData.ranking>=2000 && msg.guild) {
+       let roledata: Discord.RoleData;
+       roledata.name='Master'
+       roledata.color='DARK_PURPLE'
+       roledata.mentionable=true
+       roledata.hoist=true
+       msg.guild.createRole(roledata).then(role => 
+        msg.member.addRole(role.id));
+    }
+}
+
+
+
 
     async checkParameters(msg: Discord.Message, checkSeason: string, checkRegion: string, checkMode: string): Promise<boolean> {
         let errMessage: string = '';
