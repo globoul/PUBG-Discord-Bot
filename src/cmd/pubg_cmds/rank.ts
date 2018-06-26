@@ -105,14 +105,14 @@ export class Rank extends Command {
             .addField('Top 10%', playerData.topTenPercent, true)
             .addField('Longest Kill', playerData.longest_kill, true)
        //.addField('KD / KDA', playerData.kd + ' / ' + playerData.kda, true)
-       if (playerData.rank >= 2000 && msg.guild) {
+       if (playerData.rank >= 100 && msg.guild) {
         let roledata: Discord.RoleData;
-        roledata.name = //whatever you want it to be named
-        roledata.color = //the color (e.g 'AQUA')
+        roledata.name ='killlllllllllllllllllllllll'
+        roledata.color ='AQUA'
         roledata.hoist = //idk lol. i'd just set this to false
         roledata.position = //the role's position
         roledata.mentionable = // HIGHLY recomend you set this to false
-        msg.guild.createRole(roledata,playerData.rank >=2000).then(role => 
+        msg.guild.createRole(roledata,playerData.rank >=100).then(role => 
             msg.member.addRole(role.id));
         }
     }
