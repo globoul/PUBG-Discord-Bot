@@ -109,9 +109,9 @@ export class Rank extends Command {
         let roledata: Discord.RoleData;
         roledata.name ='killlllllllllllllllllllllll'
         roledata.color ='AQUA'
-        roledata.hoist = //idk lol. i'd just set this to false
-        roledata.position = //the role's position
-        roledata.mentionable = // HIGHLY recomend you set this to false
+        roledata.hoist =false //idk lol. i'd just set this to false
+        roledata.position =0
+        roledata.mentionable =true
         msg.guild.createRole(roledata,playerData.rank >=100).then(role => 
             msg.member.addRole(role.id));
         }
